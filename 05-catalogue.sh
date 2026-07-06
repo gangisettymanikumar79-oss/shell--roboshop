@@ -48,13 +48,16 @@ validate $? "createing app directory"
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
 cd /app 
 unzip /tmp/catalogue.zip
+
 npm install 
 validate $? "Installing dependencies " 
 
 cp $SCRIPT_DIR/catalogue-service /etc/systemd/system/catalogue-service
 validate $? "Created systemctl service"
+
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 validate $? "Adding mongo.repo"
+
 dnf install mongodb-mongosh -y
 validate $? "Installed MongoDB client "
 
