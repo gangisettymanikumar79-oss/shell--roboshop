@@ -42,7 +42,7 @@ fi
 rm -rf /app
 validate $? "Removing existing code"
 rm -rf /tmp/catalogue.zip
-VALIDATE $? "Removed catalogue zip"
+validate $? "Removed catalogue zip"
 mkdir -p  /app 
 validate $? "createing app directory"
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
@@ -52,11 +52,11 @@ npm install
 validate $? "Installing dependencies " 
 
 cp $SCRIPT_DIR/catalogue-service /etc/systemd/system/catalogue-service
-VALIDATE $? "Created systemctl service"
+validate $? "Created systemctl service"
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
-VALIDATE $? "Adding mongo.repo"
+validate $? "Adding mongo.repo"
 dnf install mongodb-mongosh -y
-VALIDATE $? "Installed MongoDB client "
+validate $? "Installed MongoDB client "
 
 
 
