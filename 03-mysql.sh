@@ -38,3 +38,6 @@ validate $? "setting up root password"
 
 
 
+
+
+
