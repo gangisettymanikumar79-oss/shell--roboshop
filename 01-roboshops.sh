@@ -3,22 +3,22 @@ AMI_ID="ami-0220d79f3f480ecf5"
 ZONE_ID="Z01307831C5314SVI2OCC"
 DOMAIN_NAME="manikumar.online"
 
-for instance in "$@"
+for INSTANCE in "$@"
 do
-    echo "lanuching instance: $instance"
+    echo "lanuching instance: $INSTANCE"
 
  INSTANCE_ID=$(aws ec2 run-instances \
               --image-id ami-0220d79f3f480ecf5 \
               --instance-type t3.micro \
-              --security-groups "roboshop-commongroup" "roboshop-$instance" \
-	          --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=roboshop-$instance}]" \
+              --security-groups "roboshop-commongroup" "roboshop-$INSTANCE" \
+	          --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=roboshop-$INSTANCE}]" \
 	          --query 'Instances[0].InstanceId' \
                          --output text)
                 
-    echo "Instance ID: $INSTANCE_ID"
+    echo "instance-ids: $INSTANCE_ID"
 
 
-   if [ "$instance" == "frontend" ]; then
+   if [ "$INSTANCE" == "frontend" ]; then
           ip=$( aws ec2 describe-instances \
              --instance-ids "$instance_ID"  \
              --query 'Reservations[*].Instances[*].PublicIpAddress' \
