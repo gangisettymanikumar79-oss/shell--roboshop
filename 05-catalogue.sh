@@ -21,10 +21,10 @@ if [ $USERID -ne 0 ]; then
 fi
 VALIDATE() {
     if [ $1 -ne 0 ]; then
-        echo -e "$timestamp [ERROR] $2..............$B FAILURE $N" | tee -a $LOGS_FILE
+        echo -e "$timestamp [ERROR] $2..............$BLUE FAILURE $NC" | tee -a $LOGS_FILE
         exit 1
     else
-        echo -e "$timestamp [INFO] $2..............$B SUCCESS  $N"  | tee -a $LOGS_FILE
+        echo -e "$timestamp [INFO] $2..............$GREEN SUCCESS  $NC"  | tee -a $LOGS_FILE
     fi
 }
 dnf module disable nodejs -y
@@ -37,7 +37,7 @@ if [ $? -ne 0 ];then
    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
        VALIDATE $? "createing roboshop system user"
 else
-    echo "system user roboshop alredy create......$B Skipping $N"
+    echo -e "system user roboshop alredy create......$BLUE Skipping $NC"
 fi
 rm -rf /app
 VALIDATE $? "Removing existing code"
@@ -64,10 +64,10 @@ VALIDATE $? "Installed MongoDB client "
 INDEX=$(mongosh --host mongodb.manikumar.online --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 
 if [ $INDEX -lt 0 ]; then
-   mongosh --host mongodb.manikumar.online </app/db/master-data.js &>>$LOGS_FILE
+   mongosh --host mongodb.manikumar.online </app/db/master-data.js 
     VALIDATE $? "Load Products"
 else
-   echo -e "Products already loaded ... $Y SKIPPING $N"
+   echo -e "Products already loaded ... $YELLOW SKIPPING $NC"
 
 fi
 systemctl enable catalogue 
