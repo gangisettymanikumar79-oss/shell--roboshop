@@ -5,29 +5,29 @@ DOMAIN_NAME="manikumar.online"
 
 for INSTANCE in "$@"
 do
-    echo "lanuching instance: $INSTANCE"
+    echo "lanuching instance: $instance"
 
  INSTANCE_ID=$(aws ec2 run-instances \
               --image-id ami-0220d79f3f480ecf5 \
               --instance-type t3.micro \
-              --security-groups "roboshop-commongroup" "roboshop-$INSTANCE" \
-	          --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=roboshop-$INSTANCE}]" \
+              --security-groups "roboshop-commongroup" "roboshop-$instance" \
+	          --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=roboshop-$instance}]" \
 	          --query 'Instances[0].InstanceId' \
                          --output text)
                 
-    echo "instance-ids: $INSTANCE_ID"
+    echo "instance_id: $INSTANCE_ID"
 
 
-   if [ "$INSTANCE" == "frontend" ]; then
+   if [ "$instance" == "frontend" ]; then
           ip=$( aws ec2 describe-instances \
-             --instance-ids "$instance_ID"  \
+             --instance-ids "$INSTANCE_ID"  \
              --query 'Reservations[*].Instances[*].PublicIpAddress' \
                    --output text
                 )
-                R53_RECORD="manikumar.online"
+                R53_RECORD="$DOMAIN_NAME"
     else
             ip=$(aws ec2 describe-instances \
-                  --instance-ids "$instance_ID"  \
+                  --instance-ids "$INSTANCE_ID"  \
                       --query 'Reservations[*].Instances[*].PrivateIpAddress' \
                             --output text
                 )
