@@ -64,6 +64,7 @@ VALIDATE $? "Installed MongoDB client "
 INDEX=$(mongosh --host mongodb.manikumar.online --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 
 if [ $INDEX -lt 0 ]; then
+
    mongosh --host mongodb.manikumar.online </app/db/master-data.js 
     VALIDATE $? "Load Products"
 else
