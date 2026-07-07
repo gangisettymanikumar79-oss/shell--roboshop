@@ -1,9 +1,9 @@
 #!/bin/bash
-LoGS_FOLDER="/var/log/roboshop"
-sudo mkdir -p $LoGS_FOLDER
-sudo chown -R ec2-user:ec2-user $LoGS_FOLDER
-sudo chmod -R 755 $LoGS_FOLDER
-LoGS_FILE="$LoGS_FOLDER/$0.log"
+LOGS_FILE="/var/log/roboshop"
+sudo mkdir -p $LOGS_FILE
+sudo chown -R ec2-user:ec2-user $LOGS_FILE
+sudo chmod -R 755 $LOGS_FILE
+LOGS_FILE="$LOGS_FILE/$0.log"
 SCRIPT_DIR=$PWD
 
 USERID=$(id -u)
@@ -16,10 +16,10 @@ NC='\e[0m' # No Color (Reset)
 timestamp=$(date +"%Y-%m-%d_%H-%M-%S")
 
 if [ $USERID -ne 0 ]; then
- echo "$timestamp [ERROR] $G please run this script with root access $N" | tee -a $LOGS_FILE
+ echo "$timestamp [ERROR] $GREEN please run this script with root access $NC" | tee -a $LOGS_FILE
         exit 1
 fi
-validate(){
+VALIDATE(){
     if [ $1 -ne 0 ]; then
         echo -e "$timestamp [ERROR] $2..............$B FAILURE $N" | tee -a $LOGS_FILE
         exit 1
@@ -30,36 +30,36 @@ validate(){
 dnf module disable nodejs -y
 dnf module enable nodejs:20 -y
 dnf install nodejs -y
-validate $? "install nodejs:20"
+VALIDATE $? "install nodejs:20"
 id roboshop
 if [ $? -ne 0 ];then
  
    useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
-       validate $? "createing roboshop system user"
+       VALIDATE $? "createing roboshop system user"
 else
     echo "system user roboshop alredy create......$B Skipping $N"
 fi
 rm -rf /app
-validate $? "Removing existing code"
+VALIDATE $? "Removing existing code"
 rm -rf /tmp/catalogue.zip
-validate $? "Removed catalogue zip"
+VALIDATE $? "Removed catalogue zip"
 mkdir -p  /app 
-validate $? "createing app directory"
+VALIDATE $? "createing app directory"
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
 cd /app 
 unzip /tmp/catalogue.zip
 
 npm install 
-validate $? "Installing dependencies " 
+VALIDATE $? "Installing dependencies " 
 
 cp $SCRIPT_DIR/catalogue-service /etc/systemd/system/catalogue-service
-validate $? "Created systemctl service"
+VALIDATE $? "Created systemctl service"
 
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 validate $? "Adding mongo.repo"
 
 dnf install mongodb-mongosh -y
-validate $? "Installed MongoDB client "
+VALIDATE $? "Installed MongoDB client "
 
 INDEX=$(mongosh --host mongodb.daws90s.shop --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 
@@ -72,7 +72,7 @@ else
 fi
 systemctl enable catalogue 
 systemctl start catalogue
-validate $? "Restarting catalogue"
+VALIDATE $? "Restarting catalogue"
 
 
 
