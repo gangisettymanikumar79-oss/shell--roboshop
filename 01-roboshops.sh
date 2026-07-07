@@ -3,7 +3,7 @@ AMI_ID="ami-0220d79f3f480ecf5"
 ZONE_ID="Z01307831C5314SVI2OCC"
 DOMAIN_NAME="manikumar.online"
 
-for INSTANCE in "$@"
+for instance in $@
 do
     echo "lanuching instance: $instance"
 
