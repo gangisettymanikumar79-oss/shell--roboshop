@@ -52,7 +52,7 @@ unzip /tmp/catalogue.zip
 npm install 
 VALIDATE $? "Installing dependencies " 
 
-cp $SCRIPT_DIR/catalogue-service /etc/systemd/system/catalogue-service
+cp $SCRIPT_DIR/catalogue.service /etc/systemd/system/catalogue.service
 VALIDATE $? "Created systemctl service"
 
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
