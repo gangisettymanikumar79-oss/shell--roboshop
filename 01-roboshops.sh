@@ -1,7 +1,7 @@
 #!/bin/bash
 AMI_ID="ami-0220d79f3f480ecf5"
-zone_ID="Z01307831C5314SVI2OCC"
-Domain_ID="manikumar.online"
+ZONE_ID="Z01307831C5314SVI2OCC"
+DOMAIN_NAME="manikumar.online"
 
 for instance in "$@"
 do
@@ -15,7 +15,7 @@ do
 	          --query 'Instances[0].InstanceId' \
                          --output text)
                 
-    echo "instance ID: $instance_ID"
+    echo "Instance ID: $INSTANCE_ID"
 
 
    if [ "$instance" == "frontend" ]; then
@@ -49,7 +49,7 @@ do
                         "TTL": 1,
                         "ResourceRecords": [
                             {
-                                "Value": "'$IP'"
+                                "Value": "'$ip'"
                             }
                         ]
                     }
