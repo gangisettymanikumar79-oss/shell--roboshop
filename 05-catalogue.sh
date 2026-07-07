@@ -19,7 +19,7 @@ if [ $USERID -ne 0 ]; then
  echo "$timestamp [ERROR] $GREEN please run this script with root access $NC" | tee -a $LOGS_FILE
         exit 1
 fi
-VALIDATE(){
+VALIDATE() {
     if [ $1 -ne 0 ]; then
         echo -e "$timestamp [ERROR] $2..............$B FAILURE $N" | tee -a $LOGS_FILE
         exit 1
@@ -56,15 +56,15 @@ cp $SCRIPT_DIR/catalogue-service /etc/systemd/system/catalogue-service
 VALIDATE $? "Created systemctl service"
 
 cp $SCRIPT_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
-validate $? "Adding mongo.repo"
+VALIDATE $? "Adding mongo.repo"
 
 dnf install mongodb-mongosh -y
 VALIDATE $? "Installed MongoDB client "
 
-INDEX=$(mongosh --host mongodb.daws90s.shop --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
+INDEX=$(mongosh --host mongodb.manikumar.online --eval 'db.getMongo().getDBNames().indexOf("catalogue")')
 
 if [ $INDEX -lt 0 ]; then
-   mongosh --host mongodb.daws90s.shop </app/db/master-data.js &>>$LOGS_FILE
+   mongosh --host mongodb.manikumar.online </app/db/master-data.js &>>$LOGS_FILE
     VALIDATE $? "Load Products"
 else
    echo -e "Products already loaded ... $Y SKIPPING $N"
@@ -73,6 +73,7 @@ fi
 systemctl enable catalogue 
 systemctl start catalogue
 VALIDATE $? "Restarting catalogue"
+
 
 
 
