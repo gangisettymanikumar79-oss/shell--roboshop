@@ -30,7 +30,7 @@ get_instance(){
   aws ec2 describe-instances \
   --filters "Name=tag:Name,Values=Shell-manikumar" \
             "Name=instance-state-name,Values=running" \
-  --query "Reservations[].Instances[].InstanceId" \
+  --query "Reservations[0].Instances[0].InstanceId" \
   --output text
 
 
@@ -51,7 +51,7 @@ INSTANCE_ID=$(get_instance "$instance")
         --output text)
         echo "launching instance :$INSTANCE_ID"
       else
-      
+
 
 done 
 
