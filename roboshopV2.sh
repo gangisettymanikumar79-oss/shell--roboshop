@@ -51,6 +51,9 @@ INSTANCE_ID=$(get_instance "$instance")
         --output text)
         echo "launching instance :$INSTANCE_ID"
       else
+      echo "roboshop-$instance already running: $INSTANCE_ID"
+  fi
+fi
 
 
 done 
