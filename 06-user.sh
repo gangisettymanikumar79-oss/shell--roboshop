@@ -49,10 +49,10 @@ VALIDATE $? "Removed user zip"
 mkdir -p  /app 
 VALIDATE $? "createing app directory"
 
-curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip 
+curl -L -o /tmp/user.zip https://roboshop-artifacts.s3.amazonaws.com/user-v3.zip 
 cd /app 
 unzip /tmp/user.zip
-VALIDATE $? "Downloaded and extracted user code"
+
 
 npm install 
 VALIDATE $? "Installing dependencies " 
