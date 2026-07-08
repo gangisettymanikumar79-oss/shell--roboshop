@@ -28,7 +28,7 @@ fi
 get_instance(){
   name=$1
   aws ec2 describe-instances \
-  --filters "Name=tag:Name,Values=Shell-manikumar" \
+  --filters "Name=tag:Name,Values=roboshop-$name" \
             "Name=instance-state-name,Values=running" \
   --query "Reservations[0].Instances[0].InstanceId" \
   --output text
