@@ -5,6 +5,7 @@ sudo chown -R ec2-user:ec2-user $LOGS_FILE
 sudo chmod -R 755 $LOGS_FILE
 LOGS_FILE="$LOGS_FILE/$0.log"
 SCRIPT_DIR=$PWD
+MYSQL_HOST=mysql.manikumar.online
 
 USERID=$(id -u)
 
@@ -61,6 +62,25 @@ VALIDATE $? "Created systemctl service"
 
 dnf install mysql -y 
 VALIDATE $? "installing mysql client"
+
+mysql -h $MYSQL_HOST -u root -pRoboShop@1 -e "use cities"
+
+if [ $? -ne 0 ]; then 
+    mysql -h mysql.manikumar.online -uroot -pRoboShop@1 < /app/db/schema.sql
+    mysql -h mysql.manikumar.online -uroot -pRoboShop@1 < /app/db/app-user.sql 
+    mysql -h mysql.manikumar.online -uroot -pRoboShop@1 < /app/db/master-data.sql
+    VALIDATE $? "Data loaded"
+
+else
+   echo -e "Data already loaded ... $Y SKIPPING $N"
+
+fi
+
+systemctl enable shipping 
+systemctl restart shipping
+VALIDATE $? "Enable and restarted shipping"
+
+
 
 
 
