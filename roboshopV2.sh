@@ -17,10 +17,10 @@ if [ $# -lt 2 ]; then
   exit 1
 fi
 
-Action=$1
+ACTION=$1
 shift
 
-if [ "$Action" != "create" ] && [ "$Action" != "delete" ]; then
+if [ "$ACTION" != "create" ] && [ "$ACTION" != "delete" ]; then
   echo -e "$RED ERROR :: first argument must be either create or delete $NC"
   echo -e "Usage: roboshopV2.sh [create/delete] [instance1] [instance2.........]"
   exit 1
@@ -36,7 +36,7 @@ get_instance(){
 
 }
 
-for instance in $@
+for instance in "$@"
 do 
 INSTANCE_ID=$(get_instance "$instance")
   if [ "$ACTION" == "create" ]; then
