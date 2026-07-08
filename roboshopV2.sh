@@ -27,15 +27,31 @@ if [ "$Action" != "create" ] && [ "$Action" != "delete" ]; then
 fi
 get_instance(){
   name=$1
-  aws ec2 describe-instances     --filters "Name=tag:Name,Values=YourInstanceName" "Name=instance-state-name,Values=Shell-manikumar"     --query "Reservations[0].Instances[0].InstanceId" --output text
-  
+  aws ec2 describe-instances \
+  --filters "Name=tag:Name,Values=Shell-manikumar" \
+            "Name=instance-state-name,Values=running" \
+  --query "Reservations[].Instances[].InstanceId" \
+  --output text
 
 
 }
 
 for instance in $@
 do 
-
+INSTANCE_ID=$(get_instance "$instance")
+  if [ "$ACTION" == "create" ]; then
+    if [ "$INSTANCE_ID" == "None" ]; then
+      echo "Launching instance: roboshop-instance"
+        INSTANCE_ID=$(aws ec2 run-instances \
+        --image-id $AMI_ID \
+        --instance-type t3.micro \
+        --security-groups "roboshop-commongroup" "roboshop-$instance" \
+	      --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=roboshop-$instance}]" \
+	      --query 'Instances[0].InstanceId' \
+        --output text)
+        echo "launching instance :$INSTANCE_ID"
+      else
+      
 
 done 
 
