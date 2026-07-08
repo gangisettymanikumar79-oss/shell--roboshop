@@ -63,7 +63,8 @@ VALIDATE $? "Created systemctl service"
 
 
 systemctl enable payment 
-systemctl start payment
+systemctl restart payment
 VALIDATE $? "Enable and restarted payment" 
+
 
 
