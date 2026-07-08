@@ -29,8 +29,8 @@ VALIDATE() {
     fi
 }
 
-dnf install maven -y
-VALIDATE $? "installing  maven"
+dnf install python3 gcc python3-devel -y
+VALIDATE $? "installing  python"
 
 id roboshop
 if [ $? -ne 0 ];then
@@ -43,45 +43,27 @@ fi
 rm -rf /app
 VALIDATE $? "Removing existing code"
 
-rm -rf /tmp/shipping.zip
-VALIDATE $? "Removed shipping zip"
+rm -rf /tmp/payment.zip
+VALIDATE $? "Removed payment zip"
 
 mkdir -p  /app 
 VALIDATE $? "createing app directory"
 
-curl -o /tmp/shipping.zip https://roboshop-artifacts.s3.amazonaws.com/shipping-v3.zip 
+curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip 
 cd /app 
-unzip /tmp/shipping.zip
+unzip /tmp/payment.zip
 
-mvn clean package 
-mv target/shipping-1.0.jar shipping.jar 
-VALIDATE $? "Installing dependencies " 
+pip3 install -r requirements.txt
+VALIDATE $? "Installing dependencies "
 
-cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service
+
+cp $SCRIPT_DIR/payment.service /etc/systemd/system/payment.service
 VALIDATE $? "Created systemctl service"
 
-dnf install mysql -y 
-VALIDATE $? "installing mysql client"
-
-mysql -h $MYSQL_HOST -u root -pRoboShop@1 -e "use cities"
-
-if [ $? -ne 0 ]; then 
-    mysql -h mysql.manikumar.online -uroot -pRoboShop@1 < /app/db/schema.sql
-    mysql -h mysql.manikumar.online -uroot -pRoboShop@1 < /app/db/app-user.sql 
-    mysql -h mysql.manikumar.online -uroot -pRoboShop@1 < /app/db/master-data.sql
-    VALIDATE $? "Data loaded"
-
-else
-   echo -e "Data already loaded ... $Y SKIPPING $N"
-
-fi
-
-systemctl enable shipping 
-systemctl restart shipping
-VALIDATE $? "Enable and restarted shipping" 
 
 
-
-
+systemctl enable payment 
+systemctl start payment
+VALIDATE $? "Enable and restarted payment" 
 
 
