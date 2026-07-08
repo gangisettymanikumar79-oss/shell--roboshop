@@ -13,7 +13,7 @@ NC='\e[0m' # No Color (Reset)
 ######## validate ###########
 if [ $# -lt 2 ]; then
   echo -e "$RED ERROR :: At least 2 arguments required $NC"
-  echo -e "Usage: $0 [create/destroy] [instance1] [instance2.....]"
+  echo -e "Usage: roboshopV2.sh [create/destroy] [instance1] [instance2.....]"
   exit 1
 fi
 
@@ -22,7 +22,7 @@ shift
 
 if [ "$Action" != "create" ] && [ "$Action" != "delete" ]; then
   echo -e "$RED ERROR :: first argument must be either create or delete $NC"
-  echo -e "Usage: $0 [create/delete] [instance1] [instance2.........]"
+  echo -e "Usage: roboshopV2.sh [create/delete] [instance1] [instance2.........]"
   exit 1
 fi
 get_instance(){
