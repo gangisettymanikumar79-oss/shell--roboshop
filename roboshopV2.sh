@@ -12,8 +12,17 @@ NC='\e[0m' # No Color (Reset)
 
 ######## validate ###########
 if [ $# -lt 2 ]; then
-  echo -e "${RED}ERROR :: At least 2 arguments required${NC}"
+  echo -e "$RED ERROR :: At least 2 arguments required $NC"
   echo -e "Usage: $0 [create/destroy] [instance_1] [instance_2]"
+  exit 1
+fi
+
+Action=$1
+shift
+
+if [ "$Action" != "create" ] && [ "$Action" != "delete" ]; then
+  echo -e "$RED ERROR :: first argument must be either create or delete $NC"
+  echo -e "Usage: $0 [create/delete] [instance_1] [instance_2]"
   exit 1
 fi
    
