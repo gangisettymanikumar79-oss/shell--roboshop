@@ -25,4 +25,17 @@ if [ "$Action" != "create" ] && [ "$Action" != "delete" ]; then
   echo -e "Usage: $0 [create/delete] [instance1] [instance2.........]"
   exit 1
 fi
+get_instance(){
+  name=$1
+  aws ec2 describe-instances \
+    --filters "Name=tag:Name,Values=roboshop-$name" \
+              "Name=instance-state-name,Values=running"
+}
+
+for instance in $@
+do 
+
+
+done 
+
    
