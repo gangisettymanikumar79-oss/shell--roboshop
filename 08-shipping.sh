@@ -59,5 +59,9 @@ VALIDATE $? "Installing dependencies "
 cp $SCRIPT_DIR/shipping.service /etc/systemd/system/shipping.service
 VALIDATE $? "Created systemctl service"
 
+dnf install mysql -y 
+VALIDATE $? "installing mysql"
+
+
 
 
