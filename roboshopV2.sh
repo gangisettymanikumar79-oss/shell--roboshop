@@ -50,7 +50,48 @@ INSTANCE_ID=$(get_instance "$instance")
 	      --query 'Instances[0].InstanceId' \
         --output text)
         echo "launching instance :$INSTANCE_ID"
-      else
+        ########update R53 record #########
+        if [ "$instance" == "frontend" ]; then
+          ip=$( aws ec2 describe-instances \
+             --instance-ids "$INSTANCE_ID"  \
+             --query 'Reservations[*].Instances[*].PublicIpAddress' \
+                   --output text
+                )
+                R53_RECORD="$DOMAIN_NAME"
+    else
+            ip=$(aws ec2 describe-instances \
+                  --instance-ids "$INSTANCE_ID"  \
+                      --query 'Reservations[*].Instances[*].PrivateIpAddress' \
+                            --output text
+                )
+                R53_RECORD="$instance.$DOMAIN_NAME"
+          fi
+    aws route53 change-resource-record-sets \
+    --hosted-zone-id $ZONE_ID \
+    --change-batch '
+        {
+            "Comment": "Update A record to new IP",
+            "Changes": [
+                {
+                    "Action": "UPSERT",
+                    "ResourceRecordSet": {
+                        "Name": "'$R53_RECORD'",
+                        "Type": "A",
+                        "TTL": 1,
+                        "ResourceRecords": [
+                            {
+                                "Value": "'$ip'"
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    '
+
+       echo "update R53 record for :$instance"
+
+else
       echo "roboshop-$instance already running: $INSTANCE_ID"
   fi
 fi
